@@ -1901,7 +1901,7 @@ exports.initialize = function (pume) {
         port: 1883,
         host: 'localhost'
     }, pume.settings);
-    var client = pume.client = new Messaging.Client(settings.host, Number(settings.port), utils.makeId());
+    var client = pume.client = new Messaging.Client(settings.host, Number(settings.port), settings.clientId || utils.makeId());
 
     client.onConnectionLost = function () {
         pume._disconnected();
