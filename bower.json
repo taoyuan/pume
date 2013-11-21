@@ -1,0 +1,25 @@
+{
+  "name": "pume",
+  "main": "browser/pume.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/taoyuan/pume",
+  "authors": [
+    "taoyuan <torworx@gmail.com>"
+  ],
+  "description": "A Pusher like javascript library for NodeJS and browser based on mqtt.js and paho mqtt javascript library.",
+  "keywords": [
+    "mqtt",
+    "push",
+    "message",
+    "pusher"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "config",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

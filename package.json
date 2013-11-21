@@ -1,7 +1,7 @@
 {
   "name": "pume",
   "version": "0.0.1",
-  "description": "pume ====",
+  "description": "A Pusher like javascript library for NodeJS and browser based on mqtt.js and paho mqtt javascript library.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

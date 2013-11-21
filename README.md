@@ -1,4 +1,4 @@
-pume
+Pume
 ====
 
-A message push pusher.js like js library using mqtt.js
+A Pusher like javascript library for NodeJS and browser based on mqtt.js and paho mqtt javascript library.
