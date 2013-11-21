@@ -48,7 +48,7 @@ describe('Pume', function () {
         });
     });
 
-    it.only('should sub and pub with different pume', function (done) {
+    it('should sub and pub with different pume', function (done) {
         var pume2 = s.getPume();
         var data = {boo: 'foo'};
         var channel = pume.subscribe('tom');
