@@ -1909,9 +1909,9 @@ exports.initialize = function (pume) {
     client.onMessageArrived = function (message) {
         pume._message(message.destinationName, message.payloadString);
     };
-    client.connect({onSuccess: function () {
+    client.connect(utils.extend({onSuccess: function () {
         pume._connected();
-    }});
+    }}, settings));
     pume.adapter = new Paho(client);
 };
 
@@ -2096,7 +2096,7 @@ function Pume(name, settings) {
     return this;
 }
 
-util.inherits(Pume, require('events').EventEmitter);
+util.inherits(Pume, EventEmitter);
 
 Pume.prototype._connected = function () {
     this.connected = true;
