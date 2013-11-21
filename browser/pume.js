@@ -1897,11 +1897,16 @@ var adapter = require('./lib/adapters/paho');
 var utils = require('../utils');
 
 exports.initialize = function (pume) {
-    var settings = utils.extend({
-        port: 1883,
-        host: 'localhost'
-    }, pume.settings);
-    var client = pume.client = new Messaging.Client(settings.host, Number(settings.port), settings.clientId || utils.makeId());
+    var settings = utils.extend({}, pume.settings);
+
+    var port = Number(settings.port || 1883);
+    var host = settings.host || '127.0.0.1';
+    var clientId = settings.clientId || utils.makeId();
+    delete settings.port;
+    delete settings.host;
+    delete settings.clientId;
+
+    var client = pume.client = new Messaging.Client(host, port, clientId);
 
     client.onConnectionLost = function () {
         pume._disconnected();
@@ -1909,9 +1914,11 @@ exports.initialize = function (pume) {
     client.onMessageArrived = function (message) {
         pume._message(message.destinationName, message.payloadString);
     };
+
     client.connect(utils.extend({onSuccess: function () {
         pume._connected();
     }}, settings));
+
     pume.adapter = new Paho(client);
 };
 

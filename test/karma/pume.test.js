@@ -5,7 +5,7 @@ describe('Pume', function () {
     var pume;
 
     beforeEach(function () {
-        pume = new Pume({port: 3000});
+        pume = new Pume({port: 4000});
     });
 
     afterEach(function () {
@@ -13,8 +13,9 @@ describe('Pume', function () {
     });
 
 
-    it('should initiate pume', function () {
+    it('should initiate pume', function (done) {
         t.ok(pume);
+        pume.on('connected', done);
     });
 
     it('should subscribe', function (done) {
