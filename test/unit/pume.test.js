@@ -47,4 +47,18 @@ describe('Pume', function () {
             pume.publish('tom', 'data', data);
         });
     });
+
+    it.only('should sub and pub with different pume', function (done) {
+        var pume2 = s.getPume();
+        var data = {boo: 'foo'};
+        var channel = pume.subscribe('tom');
+        channel.on('data', function (message) {
+            t.deepEqual(data, message);
+            done();
+        });
+        pume2.on('connected', function () {
+            pume2.publish('tom', 'data', data);
+        });
+    });
+
 });
