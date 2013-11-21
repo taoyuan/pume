@@ -2002,12 +2002,6 @@ Channel.prototype.unsubscribe = function (cb) {
     return this;
 };
 
-Channel.prototype.publish = function (event, data) {
-    var message = JSON.stringify({__event__: event, __data__: data});
-    this.adapter.publish(this.name, message);
-    return this;
-};
-
 Channel.prototype.__handleMessage = function (message) {
     message = JSON.parse(message);
     if (message.__event__ && message.__data__) {
@@ -2160,8 +2154,9 @@ Pume.prototype.unsubscribe = function (cname, cb) {
 
 Pume.prototype.publish = function (cname, event, data) {
     if (!this.connected) throw new Error('Not connected');
-    var channel = this.channels.channel(cname);
-    return channel && channel.publish(event, data);
+    var message = JSON.stringify({__event__: event, __data__: data});
+    this.adapter.publish(cname, message);
+    return this;
 };
 },{"./channels":4,"./utils":6,"events":8,"util":9}],6:[function(require,module,exports){
 var breaker = {};
