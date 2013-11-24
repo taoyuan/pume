@@ -2153,10 +2153,22 @@ Pume.prototype.unsubscribe = function (cname, cb) {
 };
 
 Pume.prototype.publish = function (cname, event, data) {
-    if (!this.connected) throw new Error('Not connected');
+    var self = this;
+    if (!self.connected) {
+        console.warn('publish delayed.');
+        self.once('connected', function () {
+            self._publish(cname, event, data);
+        });
+    } else {
+        self._publish(cname, event, data);
+    }
+
+    return this;
+};
+
+Pume.prototype._publish = function (cname, event, data) {
     var message = JSON.stringify({__event__: event, __data__: data});
     this.adapter.publish(cname, message);
-    return this;
 };
 },{"./channels":4,"./utils":6,"events":8,"util":9}],6:[function(require,module,exports){
 var breaker = {};

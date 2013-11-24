@@ -25,10 +25,7 @@ describe('Pume', function () {
             t.deepEqual(data, message);
             done();
         });
-
-        pume.on('connected', function () {
-            pume.publish('tom', 'data', data);
-        });
+        pume.publish('tom', 'data', data);
 
     });
 
@@ -42,8 +39,6 @@ describe('Pume', function () {
                 setTimeout(done, 200);
             });
         });
-        pume.on('connected', function () {
-            pume.publish('tom', 'data', data);
-        });
+        pume.publish('tom', 'data', data);
     });
 });

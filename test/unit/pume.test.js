@@ -27,9 +27,7 @@ describe('Pume', function () {
             t.deepEqual(data, message);
             done();
         });
-        pume.on('connected', function () {
-            pume.publish('tom', 'data', data);
-        });
+        pume.publish('tom', 'data', data);
     });
 
     it('should not received data when unsubscribe', function (done) {
@@ -43,9 +41,7 @@ describe('Pume', function () {
                 setTimeout(done, 200);
             });
         });
-        pume.on('connected', function () {
-            pume.publish('tom', 'data', data);
-        });
+        pume.publish('tom', 'data', data);
     });
 
     it('should sub and pub with different pume', function (done) {
@@ -56,9 +52,7 @@ describe('Pume', function () {
             t.deepEqual(data, message);
             done();
         });
-        pume2.on('connected', function () {
-            pume2.publish('tom', 'data', data);
-        });
+        pume2.publish('tom', 'data', data);
     });
 
 });
