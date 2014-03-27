@@ -1981,8 +1981,6 @@ Channel.prototype.bind = Channel.prototype.on;
 
 Channel.prototype.subscribe = function (cb) {
     var self = this;
-    cb = cb || this.__callback__;
-    if (this.__callback__) delete this.__callback__;
     this.adapter.subscribe(this.name, this.options, function (err) {
         if (cb) cb.call(self, err, self);
     });
@@ -2061,6 +2059,8 @@ function Pume(name, settings) {
     this.name = name;
     this.settings = settings || {};
 
+    this.queue = [];
+
     // and initialize pume using adapter
     // this is only one initialization entry point of adapter
     // this module should define `adapter` member of `this` (pume)
@@ -2101,13 +2101,20 @@ util.inherits(Pume, EventEmitter);
 
 Pume.prototype._connected = function () {
     this.connected = true;
-    this.subscribeAll();
+    for (var i = 0; i < this.queue.length; i++) {
+        this.queue[i]();
+    }
+    this.queue = [];
     this.emit('connected');
 };
 
 Pume.prototype._disconnected = function () {
     this.connected = false;
     this.emit('disconnected');
+};
+
+Pume.prototype._enqueue = function (fn) {
+    this.queue.push(fn);
 };
 
 Pume.prototype._message = function (cname, message) {
@@ -2123,20 +2130,18 @@ Pume.prototype.channel = function (cname) {
     return this.channels.channel(cname);
 };
 
-Pume.prototype.subscribeAll = function() {
-    for (var cname in this.channels._channels) {
-        if (this.channels._channels.hasOwnProperty(cname)) {
-            this.channels._channels[cname].subscribe();
-        }
-    }
-};
-
 Pume.prototype.subscribe = function (cname, options, cb) {
+    if (typeof options === "function") {
+        cb = options;
+        options = null;
+    }
     var channel = this.channels.add(cname, options);
     if (channel.connected) {
         channel.subscribe(cb);
-    } else if (cb) {
-        channel.__callback__ = cb;
+    } else {
+        this._enqueue(function () {
+            channel.subscribe(cb);
+        });
     }
     return channel;
 };
@@ -2155,8 +2160,7 @@ Pume.prototype.unsubscribe = function (cname, cb) {
 Pume.prototype.publish = function (cname, event, data) {
     var self = this;
     if (!self.connected) {
-        console.warn('publish delayed.');
-        self.once('connected', function () {
+        this._enqueue(function () {
             self._publish(cname, event, data);
         });
     } else {

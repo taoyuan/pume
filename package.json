@@ -1,6 +1,6 @@
 {
   "name": "pume",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A Pusher like javascript library for NodeJS and browser based on mqtt.js and paho mqtt javascript library.",
   "main": "index.js",
   "scripts": {
